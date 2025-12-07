@@ -1,9 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
+// Import des données locales pour le développement
+import localConventionsData from '../../data/conventions.json';
 
 // URL du fichier JSON généré par GitHub Actions
 // À remplacer par votre URL GitHub après configuration
-const CONVENTIONS_URL = 'https://raw.githubusercontent.com/brs64/supernatural-scraper/main/data/conventions.json';
+const CONVENTIONS_URL = 'https://raw.githubusercontent.com/brs64/supernatural-scrape/main/data/conventions.json';
 
 const STORAGE_KEY = '@supernatural_conventions';
 const LAST_CHECK_KEY = '@last_check_timestamp';
@@ -27,8 +29,8 @@ class ConventionsService {
             'URL: ' + CONVENTIONS_URL
           );
           // Utiliser les données locales en attendant
-          const localData = require('../../../data/conventions.json');
-          return localData.conventions || [];
+          console.log('✅ Utilisation des données locales (mode développement)');
+          return localConventionsData.conventions || [];
         }
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -38,16 +40,9 @@ class ConventionsService {
     } catch (error) {
       console.error('❌ Erreur lors du fetch des conventions:', error.message);
 
-      // En cas d'erreur réseau, essayer les données locales
-      try {
-        const localData = require('../../../data/conventions.json');
-        console.log('✅ Utilisation des données locales (mode développement)');
-        return localData.conventions || [];
-      } catch (localError) {
-        // Si les données locales ne sont pas disponibles, utiliser le cache
-        console.log('📦 Utilisation du cache...');
-        return await this.getCachedConventions();
-      }
+      // En cas d'erreur réseau, utiliser les données locales
+      console.log('✅ Utilisation des données locales (mode développement)');
+      return localConventionsData.conventions || [];
     }
   }
 
