@@ -21,12 +21,17 @@ jobs:
   scrape:
     runs-on: ubuntu-latest
 
+    # Permissions nécessaires pour commit et push
+    permissions:
+      contents: write
+
     steps:
       # Checkout du code
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0  # Récupérer tout l'historique
 
       # Setup Node.js
       - name: Setup Node.js
@@ -62,7 +67,7 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git add data/conventions.json
           git commit -m "🔥 Update conventions data - $(date +'%Y-%m-%d %H:%M:%S')"
-          git push
+          git push origin main || git push origin HEAD:main
 
       # Afficher un résumé
       - name: Display summary

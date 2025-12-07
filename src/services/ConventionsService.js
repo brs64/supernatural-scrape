@@ -15,15 +15,39 @@ class ConventionsService {
   async fetchConventions() {
     try {
       const response = await fetch(CONVENTIONS_URL);
+
       if (!response.ok) {
+        if (response.status === 404) {
+          console.warn(
+            '⚠️  GitHub URL retourne 404.\n' +
+            'Assurez-vous que:\n' +
+            '1. Le repository existe sur GitHub\n' +
+            '2. Le fichier data/conventions.json est présent\n' +
+            '3. Le workflow GitHub Actions a été exécuté\n' +
+            'URL: ' + CONVENTIONS_URL
+          );
+          // Utiliser les données locales en attendant
+          const localData = require('../../../data/conventions.json');
+          return localData.conventions || [];
+        }
         throw new Error(`HTTP error! status: ${response.status}`);
       }
+
       const data = await response.json();
       return data.conventions || [];
     } catch (error) {
-      console.error('Erreur lors du fetch des conventions:', error);
-      // Retourne les données en cache si disponibles
-      return await this.getCachedConventions();
+      console.error('❌ Erreur lors du fetch des conventions:', error.message);
+
+      // En cas d'erreur réseau, essayer les données locales
+      try {
+        const localData = require('../../../data/conventions.json');
+        console.log('✅ Utilisation des données locales (mode développement)');
+        return localData.conventions || [];
+      } catch (localError) {
+        // Si les données locales ne sont pas disponibles, utiliser le cache
+        console.log('📦 Utilisation du cache...');
+        return await this.getCachedConventions();
+      }
     }
   }
 
@@ -72,18 +96,32 @@ class ConventionsService {
   async notifyNewConventions(newConventions) {
     if (newConventions.length === 0) return;
 
-    const hasPermission = await this.requestNotificationPermissions();
-    if (!hasPermission) return;
+    try {
+      const hasPermission = await this.requestNotificationPermissions();
+      if (!hasPermission) {
+        console.log('⚠️  Notifications non autorisées');
+        return;
+      }
 
-    for (const convention of newConventions) {
-      await Notifications.scheduleNotificationAsync({
-        content: {
-          title: '🔥 Nouvelle convention Supernatural !',
-          body: `${convention.name} - ${convention.location} (${convention.date})`,
-          data: { convention },
-          sound: true,
-        },
-        trigger: null, // Notification immédiate
+      for (const convention of newConventions) {
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            title: '🔥 Nouvelle convention Supernatural !',
+            body: `${convention.name} - ${convention.location} (${convention.date})`,
+            data: { convention },
+            sound: true,
+          },
+          trigger: null, // Notification immédiate
+        });
+      }
+      console.log(`✅ ${newConventions.length} notification(s) envoyée(s)`);
+    } catch (error) {
+      // Les notifications ne fonctionnent pas dans Expo Go (SDK 53+)
+      // C'est normal, elles fonctionneront dans le build de production
+      console.log('ℹ️  Notifications non disponibles en mode développement (Expo Go)');
+      console.log(`📋 ${newConventions.length} nouvelle(s) convention(s) détectée(s):`);
+      newConventions.forEach(conv => {
+        console.log(`   - ${conv.name} (${conv.location})`);
       });
     }
   }

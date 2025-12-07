@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head><title>Icon Generator</title></head>
+<body>
+<canvas id="canvas"></canvas>
+<script>
+const sizes = [
+  {name: 'icon.png', size: 1024},
+  {name: 'adaptive-icon.png', size: 1024},
+  {name: 'splash.png', width: 1242, height: 2436},
+  {name: 'favicon.png', size: 48},
+  {name: 'notification-icon.png', size: 96}
+];
+sizes.forEach(spec => {
+  const canvas = document.getElementById('canvas');
+  const w = spec.width || spec.size;
+  const h = spec.height || spec.size;
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#0D0D0D';
+  ctx.fillRect(0, 0, w, h);
+  ctx.fillStyle = '#FF6600';
+  ctx.font = 'bold ' + (w/3) + 'px Arial';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('SPN', w/2, h/2);
+  console.log(spec.name + ':', canvas.toDataURL());
+});
+</script>
+</body>
+</html>

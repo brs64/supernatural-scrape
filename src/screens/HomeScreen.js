@@ -5,10 +5,10 @@ import {
   StyleSheet,
   FlatList,
   RefreshControl,
-  SafeAreaView,
   ActivityIndicator,
   StatusBar,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import ConventionsService from '../services/ConventionsService';
 import ConventionCard from '../components/ConventionCard';
 

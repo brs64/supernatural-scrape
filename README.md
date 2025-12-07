@@ -13,7 +13,7 @@ Une application mobile iOS et Android pour tracker et recevoir des notifications
 - 🎨 **UI thème Supernatural** (noir, rouge sang, orange feu)
 - 🔄 **Rafraîchissement automatique** toutes les 30 minutes
 - 💾 **Cache local** pour consultation hors ligne
-- 🌍 **Sources multiples** : Creation Entertainment, Starfury, HonCon, Eventbrite
+- 🌍 **Sources multiples** : Creation Entertainment, Starfury, HonCon, Eventbrite, People Conventions
 - 🆓 **100% gratuit** - Aucun serveur à payer !
 
 ## 🏗️ Architecture

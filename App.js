@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { LogBox } from 'react-native';
 import * as Notifications from 'expo-notifications';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import HomeScreen from './src/screens/HomeScreen';
 
 // Configuration des notifications
@@ -15,6 +16,9 @@ Notifications.setNotificationHandler({
 // Ignore certains warnings pour le développement
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
+  'expo-notifications',
+  'Expo Go',
+  'SafeAreaView',
 ]);
 
 export default function App() {
@@ -41,5 +45,9 @@ export default function App() {
     };
   }, []);
 
-  return <HomeScreen />;
+  return (
+    <SafeAreaProvider>
+      <HomeScreen />
+    </SafeAreaProvider>
+  );
 }

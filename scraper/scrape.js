@@ -198,6 +198,87 @@ async function scrapeEventbrite() {
 }
 
 /**
+ * Scraper pour People Conventions (France & Europe)
+ * https://www.peopleconventions.com
+ */
+async function scrapePeopleConventions() {
+  try {
+    console.log('🔍 Scraping People Conventions...');
+
+    // People Conventions organise régulièrement des conventions Supernatural en Europe
+    const response = await axios.get('https://www.peopleconventions.com', {
+      timeout: 10000,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+      }
+    });
+
+    const $ = cheerio.load(response.data);
+
+    // Chercher les événements sur la page principale
+    $('.event, .convention, .product, article, .entry').each((i, elem) => {
+      const text = $(elem).text();
+      const lowerText = text.toLowerCase();
+
+      // Filtrer les conventions Supernatural
+      if (lowerText.includes('supernatural') || lowerText.includes('spn')) {
+        const name = $(elem).find('h1, h2, h3, .title, .product-title, .entry-title').first().text().trim();
+        const location = extractLocation(text) || 'France';
+        const date = extractDate(text);
+        const linkElem = $(elem).find('a').first();
+        let url = linkElem.attr('href') || 'https://www.peopleconventions.com';
+
+        // Gérer les URLs relatives
+        if (url && !url.startsWith('http')) {
+          url = `https://www.peopleconventions.com${url.startsWith('/') ? '' : '/'}${url}`;
+        }
+
+        if (name && date) {
+          conventions.push({
+            id: generateId(name, date),
+            name: name || 'Supernatural Convention',
+            location,
+            date,
+            url,
+            source: 'People Conventions',
+            guests: []
+          });
+        }
+      }
+    });
+
+    // Chercher aussi dans les pages événements si structure différente
+    $('.bloc-convention, .wp-block, .elementor-widget').each((i, elem) => {
+      const text = $(elem).text();
+      const lowerText = text.toLowerCase();
+
+      if (lowerText.includes('supernatural')) {
+        const name = $(elem).find('h1, h2, h3, h4, .elementor-heading-title').first().text().trim();
+        const location = extractLocation(text);
+        const date = extractDate(text);
+        const url = $(elem).find('a').attr('href');
+
+        if (name && date && !conventions.find(c => c.id === generateId(name, date))) {
+          conventions.push({
+            id: generateId(name, date),
+            name,
+            location: location || 'France',
+            date,
+            url: url?.startsWith('http') ? url : `https://www.peopleconventions.com${url || ''}`,
+            source: 'People Conventions',
+            guests: []
+          });
+        }
+      }
+    });
+
+    console.log(`✅ People Conventions: ${conventions.length} total conventions`);
+  } catch (error) {
+    console.error('❌ Error scraping People Conventions:', error.message);
+  }
+}
+
+/**
  * Extrait une localisation du texte
  */
 function extractLocation(text) {
@@ -329,6 +410,7 @@ async function main() {
   await scrapeStarfury();
   await scrapeHonCon();
   await scrapeEventbrite();
+  await scrapePeopleConventions();
 
   // Ajouter les conventions manuelles
   addManualConventions();
