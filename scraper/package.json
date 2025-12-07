@@ -1,0 +1,14 @@
+{
+  "name": "supernatural-scraper",
+  "version": "1.0.0",
+  "description": "Scraper for Supernatural conventions in Europe",
+  "main": "scrape.js",
+  "type": "module",
+  "scripts": {
+    "scrape": "node scrape.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.2",
+    "cheerio": "^1.0.0-rc.12"
+  }
+}

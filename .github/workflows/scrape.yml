@@ -1,0 +1,82 @@
+name: Scrape Supernatural Conventions
+
+# Exécution automatique toutes les heures
+on:
+  schedule:
+    # Toutes les heures à la minute 0
+    - cron: '0 * * * *'
+
+  # Permettre l'exécution manuelle depuis l'interface GitHub
+  workflow_dispatch:
+
+  # Exécution au push (pour tester)
+  push:
+    branches:
+      - main
+    paths:
+      - 'scraper/**'
+      - '.github/workflows/scrape.yml'
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout du code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: scraper/package.json
+
+      # Installation des dépendances
+      - name: Install dependencies
+        run: |
+          cd scraper
+          npm install
+
+      # Exécution du scraper
+      - name: Run scraper
+        run: |
+          cd scraper
+          npm run scrape
+
+      # Vérifier s'il y a des changements
+      - name: Check for changes
+        id: check_changes
+        run: |
+          git diff --quiet data/conventions.json || echo "changed=true" >> $GITHUB_OUTPUT
+
+      # Commit et push des résultats
+      - name: Commit and push changes
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add data/conventions.json
+          git commit -m "🔥 Update conventions data - $(date +'%Y-%m-%d %H:%M:%S')"
+          git push
+
+      # Afficher un résumé
+      - name: Display summary
+        run: |
+          echo "## 🔥 Scraping Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f data/conventions.json ]; then
+            CONV_COUNT=$(jq '.count' data/conventions.json)
+            LAST_UPDATE=$(jq -r '.lastUpdate' data/conventions.json)
+            echo "- **Conventions found:** $CONV_COUNT" >> $GITHUB_STEP_SUMMARY
+            echo "- **Last update:** $LAST_UPDATE" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Conventions List" >> $GITHUB_STEP_SUMMARY
+            jq -r '.conventions[] | "- **\(.name)** - \(.location) (\(.date))"' data/conventions.json >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ No data file found" >> $GITHUB_STEP_SUMMARY
+          fi

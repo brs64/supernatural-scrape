@@ -1,0 +1,28 @@
+{
+  "name": "supernatural",
+  "version": "1.0.0",
+  "description": "Supernatural Conventions Tracker - Track and get notified about new Supernatural conventions in Europe",
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+  },
+  "keywords": ["supernatural", "conventions", "tracker"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "^2.2.0",
+    "expo": "^54.0.27",
+    "expo-device": "^8.0.10",
+    "expo-linking": "^8.0.10",
+    "expo-notifications": "^0.32.14",
+    "expo-status-bar": "^3.0.9",
+    "react": "^19.2.1",
+    "react-native": "^0.82.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.28.5"
+  }
+}
