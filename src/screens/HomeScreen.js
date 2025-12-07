@@ -89,10 +89,9 @@ const HomeScreen = () => {
 
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>🔥 SUPERNATURAL 🔥</Text>
-        <Text style={styles.headerSubtitle}>Conventions en Europe</Text>
-        <Text style={styles.lastCheckText}>
-          Dernière vérification: {formatLastCheck()}
+        <Text style={styles.headerTitle}>Supernatural Conventions</Text>
+        <Text style={styles.headerSubtitle}>
+          {conventions.length} convention{conventions.length > 1 ? 's' : ''} · {formatLastCheck()}
         </Text>
       </View>
 
@@ -105,14 +104,13 @@ const HomeScreen = () => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={refreshConventions}
-            tintColor="#FF6600"
-            colors={['#FF6600', '#8B0000']}
+            tintColor="#888"
+            colors={['#888']}
           />
         }
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>😈</Text>
-            <Text style={styles.emptyTitle}>Aucune convention trouvée</Text>
+            <Text style={styles.emptyTitle}>Aucune convention</Text>
             <Text style={styles.emptySubtitle}>
               Tirez pour actualiser
             </Text>
@@ -139,44 +137,28 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     marginTop: 16,
-    fontSize: 16,
-    color: '#CCCCCC',
+    fontSize: 14,
+    color: '#888',
   },
   header: {
-    backgroundColor: '#1A1A1A',
-    paddingVertical: 20,
+    backgroundColor: '#111',
+    paddingVertical: 16,
     paddingHorizontal: 16,
-    borderBottomWidth: 3,
-    borderBottomColor: '#8B0000',
-    elevation: 4,
-    shadowColor: '#FF6600',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.5,
-    shadowRadius: 4,
+    borderBottomWidth: 1,
+    borderBottomColor: '#222',
   },
   headerTitle: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#FF6600',
-    textAlign: 'center',
-    textShadowColor: '#8B0000',
-    textShadowOffset: { width: 2, height: 2 },
-    textShadowRadius: 4,
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#FFF',
   },
   headerSubtitle: {
-    fontSize: 16,
-    color: '#CCCCCC',
-    textAlign: 'center',
+    fontSize: 13,
+    color: '#888',
     marginTop: 4,
   },
-  lastCheckText: {
-    fontSize: 12,
-    color: '#888888',
-    textAlign: 'center',
-    marginTop: 8,
-  },
   list: {
-    paddingVertical: 16,
+    paddingVertical: 12,
   },
   emptyList: {
     flex: 1,
@@ -187,19 +169,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 32,
   },
-  emptyText: {
-    fontSize: 64,
-    marginBottom: 16,
-  },
   emptyTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#CCCCCC',
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#888',
     marginBottom: 8,
   },
   emptySubtitle: {
-    fontSize: 16,
-    color: '#888888',
+    fontSize: 14,
+    color: '#666',
     textAlign: 'center',
   },
 });

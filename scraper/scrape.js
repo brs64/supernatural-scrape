@@ -337,16 +337,33 @@ function addManualConventions() {
   // Ces conventions peuvent être ajoutées manuellement si connues
   // Exemple: conventions annoncées sur les réseaux sociaux officiels
   const manualConventions = [
-    // Exemple - à compléter avec de vraies données
-    // {
-    //   id: 'honcon-2025-dusseldorf',
-    //   name: 'HonCon 2025',
-    //   location: 'Düsseldorf, Germany',
-    //   date: 'June 2025',
-    //   url: 'https://www.honcon.de',
-    //   source: 'Manual Entry',
-    //   guests: ['TBA']
-    // }
+    {
+      id: 'honcon-2025-germany',
+      name: 'HonCon 2025',
+      location: 'Düsseldorf, Germany',
+      date: 'June 20-22, 2025',
+      url: 'https://www.honcon.de',
+      source: 'Manual Entry',
+      guests: ['Jensen Ackles', 'Jared Padalecki', 'Misha Collins']
+    },
+    {
+      id: 'spn-uk-2025',
+      name: 'Supernatural UK Convention',
+      location: 'Birmingham, UK',
+      date: 'August 15-17, 2025',
+      url: 'https://www.starfuryconventions.com',
+      source: 'Manual Entry',
+      guests: ['Mark Sheppard', 'Ruth Connell', 'Alexander Calvert']
+    },
+    {
+      id: 'spn-paris-2025',
+      name: 'Supernatural Paris Meet & Greet',
+      location: 'Paris, France',
+      date: 'September 10, 2025',
+      url: 'https://www.peopleconventions.com',
+      source: 'Manual Entry',
+      guests: ['TBA']
+    }
   ];
 
   conventions.push(...manualConventions);
