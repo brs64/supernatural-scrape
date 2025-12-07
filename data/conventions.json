@@ -1,5 +1,43 @@
 {
-  "lastUpdate": "2025-12-07T15:51:31.197Z",
-  "count": 0,
-  "conventions": []
+  "lastUpdate": "2025-12-07T16:18:08.458Z",
+  "count": 3,
+  "conventions": [
+    {
+      "id": "spn-uk-2025",
+      "name": "Supernatural UK Convention",
+      "location": "Birmingham, UK",
+      "date": "August 15-17, 2025",
+      "url": "https://www.starfuryconventions.com",
+      "source": "Manual Entry",
+      "guests": [
+        "Mark Sheppard",
+        "Ruth Connell",
+        "Alexander Calvert"
+      ]
+    },
+    {
+      "id": "honcon-2025-germany",
+      "name": "HonCon 2025",
+      "location": "Düsseldorf, Germany",
+      "date": "June 20-22, 2025",
+      "url": "https://www.honcon.de",
+      "source": "Manual Entry",
+      "guests": [
+        "Jensen Ackles",
+        "Jared Padalecki",
+        "Misha Collins"
+      ]
+    },
+    {
+      "id": "spn-paris-2025",
+      "name": "Supernatural Paris Meet & Greet",
+      "location": "Paris, France",
+      "date": "September 10, 2025",
+      "url": "https://www.peopleconventions.com",
+      "source": "Manual Entry",
+      "guests": [
+        "TBA"
+      ]
+    }
+  ]
 }
